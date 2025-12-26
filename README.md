@@ -2,6 +2,8 @@
 
 **This is the INTERFACE + CONTROL LAYER for the agentic incident response system.**
 
+> **Agentic Backend**: For real-time log processing, anomaly detection, and autonomous incident response, see the companion repository: [pathwaycom-pathway](https://github.com/Jayaprakash3704/pathwaycom-pathway)
+
 ## What This Repository Does
 
 This application provides **human/system interaction** with the automated incident response backend (see [pathwaycom-pathway](https://github.com/Jayaprakash3704/pathwaycom-pathway)).
@@ -216,10 +218,28 @@ curl -X POST http://localhost:8000/api/incidents/INC-ABC123/force-action \
 # Install dependencies
 pip install -r requirements.txt
 
-# Configure API keys
+# Configure API keys and settings
 cp .env.example .env
-# Edit .env with your OPENAI_API_KEY or GROQ_API_KEY
+# Edit .env with your configuration:
+# - OPENAI_API_KEY or GROQ_API_KEY (for LLM explanations)
+# - LLM_MODEL (e.g., llama-3.3-70b-versatile, gpt-4o-mini)
+# - LLM_BASE_URL (e.g., https://api.groq.com/openai/v1 for Groq)
+# - API_HOST and API_PORT for the server
+# - STORAGE_PATH for incident data location
 ```
+
+### Environment Variables
+
+**LLM Configuration** (for explanation generation):
+- `GROQ_API_KEY` or `OPENAI_API_KEY` - API key for LLM provider
+- `LLM_MODEL` - Model name for explanations (default: `llama-3.3-70b-versatile`)
+- `LLM_BASE_URL` - API endpoint (default: `https://api.groq.com/openai/v1`)
+- `LLM_TEMPERATURE` - Temperature for explanations (default: 0.7)
+
+**Server Configuration**:
+- `API_HOST` - Server host (default: `0.0.0.0`)
+- `API_PORT` - Server port (default: `8000`)
+- `STORAGE_PATH` - Path to incident data (default: `./storage`)
 
 ### 2. Start the API Server
 
@@ -466,8 +486,29 @@ for message in consumer:
 
 ### Run Tests
 ```bash
-# TODO: Add pytest tests
-pytest tests/
+# Run unit tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ --cov=app --cov=llm --cov-report=html
+
+# Test specific module
+pytest tests/test_query_incidents.py -v
+```
+
+### Manual Testing
+```bash
+# Test dashboard CLI
+python client/dashboard.py overview
+python client/dashboard.py recent 24
+python client/dashboard.py details <incident-id>
+
+# Test API endpoints
+curl http://localhost:8000/api/dashboard
+curl http://localhost:8000/api/incidents
+curl -X POST http://localhost:8000/api/explain \
+  -H "Content-Type: application/json" \
+  -d '{"incident_id": "<id>", "explain_reasoning": true}'
 ```
 
 ### Code Style
@@ -492,7 +533,26 @@ MIT License - See LICENSE file
 
 ## Related Repositories
 
-- **Backend (Agentic AI)**: [pathwaycom-pathway](https://github.com/Jayaprakash3704/pathwaycom-pathway)
+- **Backend (Agentic AI)**: [pathwaycom-pathway](https://github.com/Jayaprakash3704/pathwaycom-pathway) - Real-time streaming, anomaly detection, 5-agent LangGraph system, automated incident response
+
+**How They Connect:**
+```
+pathwaycom-pathway (Backend)     pathwaycom-llm-app (Interface)
+       |                                    |
+       | Generates incidents                | Queries & manages
+       v                                    v
+   incidents.json  ------------------>  REST API + Dashboard
+   summaries.json  ------------------>  LLM Explanations
+```
+
+---
+
+## References
+
+- **Pathway Docs**: https://pathway.com/docs/
+- **FastAPI Docs**: https://fastapi.tiangolo.com/
+- **Groq API**: https://console.groq.com/
+- **OpenAI API**: https://platform.openai.com/docs/
 
 ---
 
