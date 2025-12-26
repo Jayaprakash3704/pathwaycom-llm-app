@@ -547,6 +547,32 @@ pathwaycom-pathway (Backend)     pathwaycom-llm-app (Interface)
 
 ---
 
+## 🏆 For Hackathon Judges
+
+This is the **Interface & Human Oversight Layer** for our Track 1 submission.
+
+**This Repository's Role**:
+- ✅ REST API for querying incidents from Pathway backend
+- ✅ Human-in-the-loop controls (acknowledge, override, escalate)
+- ✅ LLM-powered explanations of agent decisions (Groq/OpenAI)
+- ✅ CLI dashboard for real-time monitoring
+- ✅ Full audit trail for compliance
+
+**Why This Matters**:
+- Autonomous agents need human oversight to be production-ready
+- Explainability is critical for Responsible AI
+- Compliance requires audit trails (GDPR, SOC 2, HIPAA)
+- Operations teams need visibility and control
+
+**Documentation**:
+- **Hackathon Details**: See [HACKATHON.md](HACKATHON.md) for this layer's contribution
+- **Full Pitch**: See [Backend HACKATHON.md](https://github.com/Jayaprakash3704/pathwaycom-pathway/blob/main/HACKATHON.md)
+- **Demo Script**: See [Backend DEMO.md](https://github.com/Jayaprakash3704/pathwaycom-pathway/blob/main/DEMO.md)
+
+**Quick Start**: `python main.py` (API server) + `python client/dashboard.py overview` (dashboard)
+
+---
+
 ## References
 
 - **Pathway Docs**: https://pathway.com/docs/
